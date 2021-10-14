@@ -1,0 +1,47 @@
+package chap02;
+
+import java.util.Scanner;
+
+public class LeftDayOfYear {
+    // 각 달의 일수
+    static int[][] mdays = {
+            {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},  // 평년
+            {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},  // 윤년
+    };
+
+    // 서기 year년은 윤년인가? (윤년 : 1 / 평년 : 0)
+    static int isLeap(int year) {
+        return (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) ? 1 : 0;
+    }
+
+    // 서기 y년 m월 d일의 남은 일 수를 구함
+    static int leftDayOfYear(int y, int m, int d) {
+        int days = mdays[isLeap(y)][m-1] - d;   // 이번 달 남은 일수
+
+        for (int i = m; i < 12; i++) {   // 다음 월~12월까지의 일 수를 더함
+            days += mdays[isLeap(y)][i];
+        }
+        return days;
+    }
+
+    public static void main(String[] args) {
+        Scanner stnIn = new Scanner(System.in);
+        int retry;  // 다시 한 번?
+
+        System.out.println("그 해 남은 일수를 구합니다.");
+
+        do {
+            System.out.print("년 : ");
+            int year = stnIn.nextInt();   // 년
+            System.out.print("월 : ");
+            int month = stnIn.nextInt();   // 월
+            System.out.print("일 : ");
+            int day = stnIn.nextInt();   // 일
+
+            System.out.printf("남은 일 수는 %d일입니다.\n", leftDayOfYear(year, month, day));
+
+            System.out.print("한 번 더 할까요?( 1. 예 / 0. 아니오) : ");
+            retry = stnIn.nextInt();
+        } while (retry == 1);
+    }
+}
